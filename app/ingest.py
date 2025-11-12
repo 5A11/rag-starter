@@ -1,6 +1,3 @@
-import json
-import os
-
 import fitz  # type: ignore
 import httpx
 from bs4 import BeautifulSoup

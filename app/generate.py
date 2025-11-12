@@ -29,10 +29,12 @@ def format_ctx(docs):
 
 
 def answer(vs, query):
-    docs = retrieve(vs, query, k=TOP_K)
+    pairs = retrieve(vs, query, k=TOP_K, with_scores=True)
+    docs = [p[0] for p in pairs]
+    scores = [float(p[1]) if p[1] is not None else None for p in pairs]
     ctx = format_ctx(docs)
     msg = PROMPT.format(q=query, ctx=ctx)
     resp = client.chat.completions.create(
         model=LLM_MODEL, messages=[{"role": "user", "content": msg}], temperature=0.2
     )
-    return resp.choices[0].message.content, docs
+    return resp.choices[0].message.content, docs, scores

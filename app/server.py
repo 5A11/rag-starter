@@ -1,4 +1,3 @@
-import os
 import tempfile
 
 from fastapi import FastAPI, Form, UploadFile
@@ -37,6 +36,8 @@ async def ask(q: str):
     global _vs
     if not _vs:
         _vs = build_or_load_index(chunks=None)
-    ans, docs = answer(_vs, q)
-    cites = [{"i": i + 1, "meta": d.metadata} for i, d in enumerate(docs)]
+    ans, docs, scores = answer(_vs, q)
+    cites = []
+    for i, (d, s) in enumerate(zip(docs, scores), start=1):
+        cites.append({"i": i, "meta": d.metadata, "score": s})
     return {"answer": ans, "citations": cites}

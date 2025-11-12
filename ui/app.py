@@ -1,6 +1,6 @@
 import os
 
-import requests
+import requests  # type: ignore
 import streamlit as st
 
 API = os.getenv("API_URL", "http://127.0.0.1:8000")
@@ -25,4 +25,4 @@ if st.button("Ask") and q:
     st.write(r["answer"])
     st.subheader("Citations")
     for c in r["citations"]:
-        st.caption(str(c["meta"]))
+        st.caption(f"{c['meta']}  |  score={c['score']}")
